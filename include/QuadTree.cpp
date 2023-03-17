@@ -1,10 +1,8 @@
 #include "QuadTree.hpp"
 
-float f1(float x, float y){
-    return (std::pow(std::pow(x,2) + std::pow(y,2) - 4, 3) - std::pow(x,2)*std::pow(y,3));
-}
 
-QuadTree::QuadTree(float width, float height, float coodX, float coodY, int max_depth, int depth){
+
+QuadTree::QuadTree(float width, float height, float coodX, float coodY, int function, int max_depth, int depth){
     this->divided = false;
     this->width = width;
     this->height = height;
@@ -12,6 +10,7 @@ QuadTree::QuadTree(float width, float height, float coodX, float coodY, int max_
     this->coodY = coodY;
     this->max_depth = max_depth;
     this->depth = depth;
+    this->function = function;
 
     this->rec.setOutlineThickness(-1);
     this->rec.setFillColor(sf::Color::Black);
@@ -48,10 +47,10 @@ void QuadTree::division(QuadTree* tree){
     float width = tree->width/2;
     float height = tree->height/2;
 
-    this->norte_esq = new QuadTree(width, height, codX-width/2, codY-height/2, tree->getMax_depth(), tree->getDepth()+1);
-    this->norte_dir = new QuadTree(width, height, codX+width/2, codY-height/2, tree->getMax_depth(), tree->getDepth()+1);
-    this->sul_dir = new QuadTree(width, height, codX+width/2, codY+height/2, tree->getMax_depth(), tree->getDepth()+1);
-    this->sul_esq = new QuadTree(width, height, codX-width/2, codY+height/2, tree->getMax_depth(), tree->getDepth()+1);
+    this->norte_esq = new QuadTree(width, height, codX-width/2, codY-height/2, tree->function, tree->getMax_depth(), tree->getDepth()+1);
+    this->norte_dir = new QuadTree(width, height, codX+width/2, codY-height/2, tree->function, tree->getMax_depth(), tree->getDepth()+1);
+    this->sul_dir = new QuadTree(width, height, codX+width/2, codY+height/2, tree->function, tree->getMax_depth(), tree->getDepth()+1);
+    this->sul_esq = new QuadTree(width, height, codX-width/2, codY+height/2, tree->function, tree->getMax_depth(), tree->getDepth()+1);
 
     this->divided = true;
 }
@@ -114,14 +113,14 @@ bool QuadTree::contains(QuadTree* tree){
 
     float esq = tree->coodX - tree->getRec().getGlobalBounds().width/2;
     float dir = tree->coodX + tree->getRec().getGlobalBounds().width/2;
-    float cima = tree->coodY - tree->getRec().getGlobalBounds().height/2;
-    float baixo = tree->coodY + tree->getRec().getGlobalBounds().height/2;
+    float cima = 512.f + (-1)*(tree->coodY - tree->getRec().getGlobalBounds().height/2);
+    float baixo = 512.f + (-1)*(tree->coodY + tree->getRec().getGlobalBounds().height/2);
 
 
-    float cimaEsq = f1(this->ratio*(esq - 256.f), this->ratio*(cima - 256.f));
-    float cimaDir = f1(this->ratio*(dir - 256.f),this->ratio*(cima - 256.f));
-    float baixoDir = f1(this->ratio*(dir - 256.f), this->ratio*(baixo - 256.f));
-    float baixoEsq = f1(this->ratio*(esq - 256.f), this->ratio*(baixo - 256.f));
+    float cimaEsq = functions.getFunction(this->function)(this->ratio*(esq - 256.f), this->ratio*(cima - 256.f));
+    float cimaDir = functions.getFunction(this->function)(this->ratio*(dir - 256.f),this->ratio*(cima - 256.f));
+    float baixoDir = functions.getFunction(this->function)(this->ratio*(dir - 256.f), this->ratio*(baixo - 256.f));
+    float baixoEsq = functions.getFunction(this->function)(this->ratio*(esq - 256.f), this->ratio*(baixo - 256.f));
 
     if (cimaEsq == baixoDir && cimaDir == baixoEsq)
         return true;
@@ -134,4 +133,62 @@ bool QuadTree::contains(QuadTree* tree){
     return true;
 }
 
+void QuadTree::plusDepth(QuadTree* tree){
+    if (tree->max_depth < 9){
+        tree->max_depth = tree->max_depth + 1;
+
+        if (tree->depth == tree->max_depth - 1){
+            if(tree->contains(tree) == true){
+                tree->division(tree);
+            }
+            return;
+        }
+
+        if (tree->isDivided() == true){
+            tree->plusDepth(tree->getNor_Esq());
+            tree->plusDepth(tree->getNor_Dir());
+            tree->plusDepth(tree->getSul_Dir());
+            tree->plusDepth(tree->getSul_Esq());
+        }  
+    }
+}
+
+void QuadTree::subDepth(QuadTree* tree){
+    if (tree->max_depth > 1){
+        tree->max_depth = tree->max_depth - 1;
+
+        if (tree->isDivided() == true){
+            tree->subDepth(tree->getNor_Esq());
+            tree->subDepth(tree->getNor_Dir());
+            tree->subDepth(tree->getSul_Dir());
+            tree->subDepth(tree->getSul_Esq());
+        }
+    }
+}
+
+int QuadTree::getMaxDepth(){
+    return this->max_depth;
+}
+
+void QuadTree::prevFunction(QuadTree* tree){
+    if (tree->function > 1){
+        tree->norte_esq = nullptr;
+        tree->norte_dir = nullptr;
+        tree->sul_dir = nullptr;
+        tree->sul_esq = nullptr;
+        tree->function = tree->function-1;
+        tree->plotTree(tree);
+    }
+}
+
+void QuadTree::nextFunction(QuadTree* tree){
+    if (tree->function < 11){
+        tree->norte_esq = nullptr;
+        tree->norte_dir = nullptr;
+        tree->sul_dir = nullptr;
+        tree->sul_esq = nullptr;
+        tree->function = tree->function+1;
+        tree->plotTree(tree);
+    }
+}
 

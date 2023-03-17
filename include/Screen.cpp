@@ -16,7 +16,7 @@ void Screen::initWindow(){
 
 
 void Screen::initQuadTree(){
-    this->quadtree = new QuadTree(512.f,512.f, 256, 256, 9);
+    this->quadtree = new QuadTree(512.f,512.f, 256, 256, 0, 8);
 }
 
 Screen::Screen(){
@@ -40,8 +40,29 @@ void Screen::pollEvent(){
                 this->window->close();
                 break;
             case sf::Event::KeyPressed:
-                if (this->ev.key.code == sf::Keyboard::Escape)
-                    this->window->close();
+                switch(ev.key.code){
+                    case sf::Keyboard::Escape:
+                        this->window->close();
+                        break;
+                    case sf::Keyboard::Up:
+                        this->quadtree->plusDepth(this->quadtree);
+                        this->quadtree->draw(this->quadtree, this->shapes);
+                        break;
+                    case sf::Keyboard::Down:
+                        this->quadtree->subDepth(this->quadtree);
+                        this->quadtree->draw(this->quadtree, this->shapes);
+                        break;
+                    case sf::Keyboard::Left:
+                        this->shapes.clear();
+                        this->quadtree->prevFunction(this->quadtree);
+                        this->quadtree->draw(this->quadtree, this->shapes);
+                        break;
+                    case sf::Keyboard::Right:
+                        this->shapes.clear();
+                        this->quadtree->nextFunction(this->quadtree);
+                        this->quadtree->draw(this->quadtree, this->shapes);
+                        break;
+                }
                 break;
         }
     }

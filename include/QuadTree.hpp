@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
-#include <cmath>
-#include <iostream>
+#include "functions.hpp"
+
 
 class QuadTree{
     private:
@@ -21,16 +21,17 @@ class QuadTree{
 
         int max_depth;
         int depth;
+        int function;
         float ratio;
 
+        Functions functions;
+
         
-
-
         void division(QuadTree*);
 
 
     public:
-        QuadTree(float, float, float, float, int, int depth=0);
+        QuadTree(float, float, float, float, int, int, int depth=0);
         ~QuadTree();
         void draw(QuadTree*, std::vector <sf::RectangleShape> &shapes);
         int getMax_depth();
@@ -44,8 +45,12 @@ class QuadTree{
         QuadTree* getNor_Dir();
         QuadTree* getSul_Dir();
         QuadTree* getSul_Esq();
-
+        int getMaxDepth();
+        void plusDepth(QuadTree*);
+        void subDepth(QuadTree*);
         bool contains(QuadTree*);
+        void prevFunction(QuadTree*);
+        void nextFunction(QuadTree*);
 
 
 
