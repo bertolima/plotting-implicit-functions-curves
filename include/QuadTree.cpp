@@ -1,7 +1,7 @@
 #include "QuadTree.hpp"
 
 float f1(float x, float y){
-    return (x*x*x* + y - 4);
+    return (std::pow(std::pow(x,2) + std::pow(y,2) - 4, 3) - std::pow(x,2)*std::pow(y,3));
 }
 
 QuadTree::QuadTree(float width, float height, float coodX, float coodY, int max_depth, int depth){
@@ -26,10 +26,11 @@ QuadTree::QuadTree(float width, float height, float coodX, float coodY, int max_
 }
 
 void QuadTree::draw(QuadTree* tree, std::vector <sf::RectangleShape> &shapes){
-    if (tree->getDepth() == tree->getMax_depth())
+    if (tree->getDepth() == tree->getMax_depth()){
         return;
-    
+    }
     shapes.push_back(tree->getRec());
+    
 
     if (tree->isDivided()){
         tree->draw(tree->getNor_Esq(), shapes);
@@ -113,37 +114,14 @@ bool QuadTree::contains(QuadTree* tree){
 
     float esq = tree->coodX - tree->getRec().getGlobalBounds().width/2;
     float dir = tree->coodX + tree->getRec().getGlobalBounds().width/2;
-    float cima = tree->coodY + tree->getRec().getGlobalBounds().height/2;
-    float baixo = tree->coodY - tree->getRec().getGlobalBounds().height/2;
+    float cima = tree->coodY - tree->getRec().getGlobalBounds().height/2;
+    float baixo = tree->coodY + tree->getRec().getGlobalBounds().height/2;
 
 
-    float cimaEsq = f1(this->ratio*(esq - tree->getRec().getGlobalBounds().width/2), this->ratio*(cima - tree->getRec().getGlobalBounds().width/2));
-    float cimaDir = f1(this->ratio*(dir - tree->getRec().getGlobalBounds().width/2),this->ratio*(cima - tree->getRec().getGlobalBounds().width/2));
-    float baixoDir = f1(this->ratio*(dir - tree->getRec().getGlobalBounds().width/2), this->ratio*(baixo - tree->getRec().getGlobalBounds().height/2));
-    float baixoEsq = f1(this->ratio*(esq - tree->getRec().getGlobalBounds().width/2), this->ratio*(baixo - tree->getRec().getGlobalBounds().height/2));
-
-    std::cout << esq << std::endl;
-    std::cout << dir << std::endl;
-    std::cout << cima << std::endl;
-    std::cout << baixo << std::endl;
-
-    std::cout << std::endl;
-
-    std::cout << (esq - tree->getRec().getGlobalBounds().width/2) << " " <<  (cima - tree->getRec().getGlobalBounds().width/2) << std::endl;
-    std::cout << (dir - tree->getRec().getGlobalBounds().width/2) << " " <<  (cima - tree->getRec().getGlobalBounds().width/2) << std::endl;
-    std::cout << (dir - tree->getRec().getGlobalBounds().width/2) << " " <<  (baixo - tree->getRec().getGlobalBounds().height/2) << std::endl;
-    std::cout << (esq - tree->getRec().getGlobalBounds().width/2) << " " <<  (baixo - tree->getRec().getGlobalBounds().height/2) << std::endl;
-
-    std::cout << std::endl;
-
-    std::cout << cimaEsq << std::endl;
-    std::cout << cimaDir << std::endl;
-    std::cout << baixoDir << std::endl;
-    std::cout << baixoEsq << std::endl;
-
-    std::cout << std::endl;
-
-    
+    float cimaEsq = f1(this->ratio*(esq - 256.f), this->ratio*(cima - 256.f));
+    float cimaDir = f1(this->ratio*(dir - 256.f),this->ratio*(cima - 256.f));
+    float baixoDir = f1(this->ratio*(dir - 256.f), this->ratio*(baixo - 256.f));
+    float baixoEsq = f1(this->ratio*(esq - 256.f), this->ratio*(baixo - 256.f));
 
     if (cimaEsq == baixoDir && cimaDir == baixoEsq)
         return true;
