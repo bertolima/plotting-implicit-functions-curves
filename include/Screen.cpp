@@ -16,7 +16,7 @@ void Screen::initWindow(){
 
 
 void Screen::initQuadTree(){
-    this->quadtree = new QuadTree(512.f,512.f, 0, 512, 8);
+    this->quadtree = new QuadTree(512.f,512.f, 256, 256, 8);
 }
 
 Screen::Screen(){
