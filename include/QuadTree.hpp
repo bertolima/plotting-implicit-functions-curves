@@ -1,58 +1,66 @@
 #include <SFML/Graphics.hpp>
 #include "functions.hpp"
+#include <iostream>
 
 
 class QuadTree{
     private:
+        //tree variables
         bool divided;
         float width;
         float height;
-
         float coodX;
         float coodY;
-
-
-        sf::RectangleShape rec;
-
-        QuadTree* norte_esq;
-        QuadTree* norte_dir;
-        QuadTree* sul_esq;
-        QuadTree* sul_dir;
-
         int max_depth;
         int depth;
         int function;
-        float ratio;
 
+        //children
+        QuadTree* nw;
+        QuadTree* ne;
+        QuadTree* se;
+        QuadTree* sw;
+
+        //control variables
+        sf::RectangleShape rec;
+        float ratio;
         Functions functions;
 
-        
-        void division(QuadTree*);
+        //private functions
+        void division();
 
 
     public:
+    
+        //const and desc
         QuadTree(float, float, float, float, int, int, int depth=0);
         ~QuadTree();
-        void draw(QuadTree*, std::vector <sf::RectangleShape> &shapes);
-        int getMax_depth();
+
+        //draw tree
+        void draw(std::vector <sf::RectangleShape> &shapes);
+
+        //access
         int getDepth();
+        int getMaxDepth();
         float getWidth();
         float getHeight();
         bool isDivided();
-        void plotTree(QuadTree*);
+        QuadTree getNor_Esq();
+        QuadTree getNor_Dir();
+        QuadTree getSul_Dir();
+        QuadTree getSul_Esq();
         sf::RectangleShape getRec();
-        QuadTree* getNor_Esq();
-        QuadTree* getNor_Dir();
-        QuadTree* getSul_Dir();
-        QuadTree* getSul_Esq();
-        int getMaxDepth();
-        void plusDepth(QuadTree*);
-        void subDepth(QuadTree*);
-        bool contains(QuadTree*);
-        void prevFunction(QuadTree*);
-        void nextFunction(QuadTree*);
 
+        //create all tree structure
+        void plotTree();
 
+        //public functions
+        void plusDepth();
+        void subDepth();
+        bool contains();
+        void prevFunction();
+        void nextFunction();
+        void clearChildren();
 
 };
 
