@@ -71,6 +71,9 @@ bool QuadTree::isDivided(){
 sf::RectangleShape QuadTree::getRec(){
     return this->rec;
 }
+int QuadTree::getFunction(){
+    return this->function;
+}
 
 //tree's methods
 bool QuadTree::contains(){
@@ -168,45 +171,41 @@ void QuadTree::subDepth(){
 }
 
 
-void QuadTree::prevFunction(){
+void QuadTree::prevFunction(std::vector <sf::RectangleShape> &shapes){
 
     if (this->function > 1){
-        this->nw->clearChildren();
-        this->ne->clearChildren();
-        this->se->clearChildren();
-        this->sw->clearChildren();
+        this->clearChildren();
         this->function = this->function-1;
+        shapes.clear();
         this->plotTree();
+        this->draw(shapes);
     }
 
     else if (this->function == 0){
         this->function = 11;
         this->nw->clearChildren();
-        this->ne->clearChildren();
-        this->se->clearChildren();
-        this->sw->clearChildren();
+        shapes.clear();
         this->plotTree();
+        this->draw(shapes);
 
     }
 }
 
-void QuadTree::nextFunction(){
+void QuadTree::nextFunction(std::vector <sf::RectangleShape> &shapes){
     if (this->function == 11){
         this->function = 0;
-        this->nw->clearChildren();
-        this->ne->clearChildren();
-        this->se->clearChildren();
-        this->sw->clearChildren();
+        this->clearChildren();
+        shapes.clear();
         this->plotTree();
+        this->draw(shapes);
     }
         
     else if (this->function < 11){
         this->function = this->function+1;
-        this->nw->clearChildren();
-        this->ne->clearChildren();
-        this->se->clearChildren();
-        this->sw->clearChildren();
+        this->clearChildren();
+        shapes.clear();
         this->plotTree();
+        this->draw(shapes);
 
     }
 }
