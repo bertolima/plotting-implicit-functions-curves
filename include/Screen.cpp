@@ -52,16 +52,16 @@ void Screen::pollEvent(){
                         this->quadtree->subDepth();
                         this->quadtree->draw(this->shapes);
                         break;
-                    // case sf::Keyboard::Left:
-                    //     this->shapes.clear();
-                    //     this->quadtree->prevFunction(this->quadtree);
-                    //     this->quadtree->draw(this->quadtree, this->shapes);
-                    //     break;
-                    // case sf::Keyboard::Right:
-                    //     this->shapes.clear();
-                    //     this->quadtree->nextFunction(this->quadtree);
-                    //     this->quadtree->draw(this->quadtree, this->shapes);
-                    //     break;
+                    case sf::Keyboard::Left:
+                        this->shapes.clear();
+                        this->quadtree->prevFunction();
+                        this->quadtree->draw(this->shapes);
+                        break;
+                    case sf::Keyboard::Right:
+                        this->shapes.clear();
+                        this->quadtree->nextFunction();
+                        this->quadtree->draw(this->shapes);
+                        break;
                 }
                 break;
         }

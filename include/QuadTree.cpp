@@ -123,9 +123,18 @@ void QuadTree::plotTree(){
         this->sw->plotTree();
     }
 }
+void QuadTree::clearChildren(){
+    delete nw;
+    nw = nullptr;
+    delete ne;
+    ne = nullptr;
+    delete sw;
+    sw = nullptr;
+    delete se;
+    se = nullptr;
+}
 
-
-
+//change structure methods
 void QuadTree::plusDepth(){
     if (this->max_depth < 9){
         this->max_depth = this->max_depth + 1;
@@ -159,45 +168,46 @@ void QuadTree::subDepth(){
 }
 
 
-// void QuadTree::prevFunction(QuadTree* tree){
+void QuadTree::prevFunction(){
 
+    if (this->function > 1){
+        this->nw->clearChildren();
+        this->ne->clearChildren();
+        this->se->clearChildren();
+        this->sw->clearChildren();
+        this->function = this->function-1;
+        this->plotTree();
+    }
 
-//     if (tree->function > 1){
-//         tree->function = tree->function-1;
-//         tree->clearTree(tree);
-//         tree->plotTree(tree);
-//     }
+    else if (this->function == 0){
+        this->function = 11;
+        this->nw->clearChildren();
+        this->ne->clearChildren();
+        this->se->clearChildren();
+        this->sw->clearChildren();
+        this->plotTree();
 
-//     else if (tree->function == 0){
-//         tree->function = 11;
-//         tree->clearTree(tree);
-//         tree->plotTree(tree);
-
-//     }
-// }
-
-// void QuadTree::nextFunction(QuadTree* tree){
-//     if (tree->function == 11){
-//         tree->function = 0;
-//         tree->clearTree(tree);
-//         tree->plotTree(tree);
-//     }
-        
-//     else if (tree->function < 11){
-//         tree->function = tree->function+1;
-//         tree->clearTree(tree);
-//         tree->plotTree(tree);
-
-//     }
-// }
-
-void QuadTree::clearChildren(){
-    delete nw;
-    nw = nullptr;
-    delete ne;
-    ne = nullptr;
-    delete sw;
-    sw = nullptr;
-    delete se;
-    se = nullptr;
+    }
 }
+
+void QuadTree::nextFunction(){
+    if (this->function == 11){
+        this->function = 0;
+        this->nw->clearChildren();
+        this->ne->clearChildren();
+        this->se->clearChildren();
+        this->sw->clearChildren();
+        this->plotTree();
+    }
+        
+    else if (this->function < 11){
+        this->function = this->function+1;
+        this->nw->clearChildren();
+        this->ne->clearChildren();
+        this->se->clearChildren();
+        this->sw->clearChildren();
+        this->plotTree();
+
+    }
+}
+
