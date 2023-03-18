@@ -53,26 +53,13 @@ void Screen::pollEvent(){
                         this->quadtree->draw(this->shapes);
                         break;
                     case sf::Keyboard::Left:
-                        if (this->quadtree->getFunction() > 0){
-                            int function = this->quadtree->getFunction() -1;
-                            int depth = this->quadtree->getMaxDepth();
-                            delete this->quadtree;
-                            this->quadtree = nullptr;
-                            this->quadtree = new QuadTree(512.f,512.f, 256, 256, function, depth);
-                            this->shapes.clear();
-                            this->quadtree->draw(this->shapes);
-                        }
+                        this->quadtree->prevFunction();
+                        this->plotted = false;
                         break;
                     case sf::Keyboard::Right:
-                        if (this->quadtree->getFunction() < 10){
-                            int function = this->quadtree->getFunction() +1;
-                            int depth = this->quadtree->getMaxDepth();
-                            delete this->quadtree;
-                            this->quadtree = nullptr;
-                            this->quadtree = new QuadTree(512.f,512.f, 256, 256, function, depth);
-                            this->shapes.clear();
-                            this->quadtree->draw(this->shapes);
-                        }
+                        this->quadtree->nextFunction();
+                        this->plotted = false;
+
                         break;
                 }
                 break;
@@ -81,7 +68,8 @@ void Screen::pollEvent(){
 }
 
 void Screen::updateTree(){
-    if (plotted == false){
+    if (this->plotted == false){
+        this->quadtree->plotTree();
         this->quadtree->draw(this->shapes);
         this->plotted = true;
     }
@@ -107,4 +95,3 @@ void Screen::render(){
 
     this->window->display();
 }
-

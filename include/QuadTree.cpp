@@ -25,9 +25,6 @@ QuadTree::QuadTree(float width, float height, float coodX, float coodY, int func
     this->sw = nullptr;
     this->se = nullptr;
 
-    this->plotTree();
-
-
 }
 
 QuadTree::~QuadTree(){
@@ -42,7 +39,7 @@ void QuadTree::draw(std::vector <sf::RectangleShape> &shapes){
     if (this->getDepth() == this->getMaxDepth()){
         return;
     }
-    shapes.push_back(this->getRec());
+    shapes.emplace_back(this->getRec());
 
     if (this->isDivided()){
         this->nw->draw(shapes);
@@ -70,9 +67,6 @@ bool QuadTree::isDivided(){
 }
 sf::RectangleShape QuadTree::getRec(){
     return this->rec;
-}
-int QuadTree::getFunction(){
-    return this->function;
 }
 
 //tree's methods
@@ -171,42 +165,28 @@ void QuadTree::subDepth(){
 }
 
 
-void QuadTree::prevFunction(std::vector <sf::RectangleShape> &shapes){
+void QuadTree::prevFunction(){
 
     if (this->function > 1){
-        this->clearChildren();
         this->function = this->function-1;
-        shapes.clear();
-        this->plotTree();
-        this->draw(shapes);
+        this->clearChildren();
+
     }
 
     else if (this->function == 0){
         this->function = 11;
-        this->nw->clearChildren();
-        shapes.clear();
-        this->plotTree();
-        this->draw(shapes);
-
+        this->clearChildren();
     }
 }
 
-void QuadTree::nextFunction(std::vector <sf::RectangleShape> &shapes){
+void QuadTree::nextFunction(){
     if (this->function == 11){
         this->function = 0;
         this->clearChildren();
-        shapes.clear();
-        this->plotTree();
-        this->draw(shapes);
     }
         
     else if (this->function < 11){
         this->function = this->function+1;
         this->clearChildren();
-        shapes.clear();
-        this->plotTree();
-        this->draw(shapes);
-
     }
 }
-

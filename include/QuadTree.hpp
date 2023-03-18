@@ -44,7 +44,6 @@ class QuadTree{
         int getMaxDepth();
         float getWidth();
         float getHeight();
-        int getFunction();
         bool isDivided();
         QuadTree getNor_Esq();
         QuadTree getNor_Dir();
@@ -59,10 +58,8 @@ class QuadTree{
         void plusDepth();
         void subDepth();
         bool contains();
-        void prevFunction(std::vector <sf::RectangleShape> &shapes);
-        void nextFunction(std::vector <sf::RectangleShape> &shapes);
+        void prevFunction();
+        void nextFunction();
         void clearChildren();
 
 };
-
-
