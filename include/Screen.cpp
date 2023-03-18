@@ -45,23 +45,23 @@ void Screen::pollEvent(){
                         this->window->close();
                         break;
                     case sf::Keyboard::Up:
-                        this->quadtree->plusDepth(this->quadtree);
-                        this->quadtree->draw(this->quadtree, this->shapes);
+                        this->quadtree->plusDepth();
+                        this->quadtree->draw(this->shapes);
                         break;
                     case sf::Keyboard::Down:
-                        this->quadtree->subDepth(this->quadtree);
-                        this->quadtree->draw(this->quadtree, this->shapes);
+                        this->quadtree->subDepth();
+                        this->quadtree->draw(this->shapes);
                         break;
-                    case sf::Keyboard::Left:
-                        this->shapes.clear();
-                        this->quadtree->prevFunction(this->quadtree);
-                        this->quadtree->draw(this->quadtree, this->shapes);
-                        break;
-                    case sf::Keyboard::Right:
-                        this->shapes.clear();
-                        this->quadtree->nextFunction(this->quadtree);
-                        this->quadtree->draw(this->quadtree, this->shapes);
-                        break;
+                    // case sf::Keyboard::Left:
+                    //     this->shapes.clear();
+                    //     this->quadtree->prevFunction(this->quadtree);
+                    //     this->quadtree->draw(this->quadtree, this->shapes);
+                    //     break;
+                    // case sf::Keyboard::Right:
+                    //     this->shapes.clear();
+                    //     this->quadtree->nextFunction(this->quadtree);
+                    //     this->quadtree->draw(this->quadtree, this->shapes);
+                    //     break;
                 }
                 break;
         }
@@ -70,7 +70,7 @@ void Screen::pollEvent(){
 
 void Screen::updateTree(){
     if (plotted == false){
-        this->quadtree->draw(this->quadtree, this->shapes);
+        this->quadtree->draw(this->shapes);
         this->plotted = true;
     }
 }
